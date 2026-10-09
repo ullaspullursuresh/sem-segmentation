@@ -1,4 +1,4 @@
-# Semi-Supervised Segmentation of SEM Nanoparticle Images
+# Supervised Segmentation of SEM Nanoparticle Images
 ## Working towards a Semi-Supervised Segmentation Model
 
 ---
