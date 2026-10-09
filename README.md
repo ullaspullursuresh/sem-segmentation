@@ -1,4 +1,7 @@
 # Semi-Supervised Segmentation of SEM Nanoparticle Images
+## Working towards a Semi-Supervised Segmentation Model
+
+---
 
 The aim of this work is to build a pipeline that trains a network on a labelled dataset, and later can be extended to a semi-supervised model to segment images. The pipeline can be implemented using any models. For this attempt I have started with the UNet and Dense-UNet model. This attempt is inspired and derived from the work of Huang et al. (DOI: 10.1039/d6ra02763f), who have done this segementation task on the publically available annotated datasets - NanoSEM-464 and NanoSEM-1707. 
 
@@ -40,8 +43,7 @@ Every sample in this project is a **pair** of files:
 
 The mask is the "answer key". It was drawn by a human annotator, and it tells the model, pixel by pixel, what it should have found in the image.
 
-![Example image, mask and overlay](<img width="1600" height="533" alt="image" src="https://github.com/user-attachments/assets/9ce24ac3-7ebc-40ec-983d-71d0628b25ac" />
-)
+![Example image, mask and overlay](https://github.com/user-attachments/assets/9ce24ac3-7ebc-40ec-983d-71d0628b25ac)
 
 *Left: the original SEM image. Middle: the ground-truth binary mask (white = particle, black = background). Right: the mask overlaid on the image in light blue, showing how the mask lines up with the structures in the image.*
 
@@ -292,6 +294,12 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 #### UNet examples
 
 ![Some random examples with Ground truth mask and Prediction mask](https://github.com/ullaspullursuresh/sem-segmentation/blob/main/unet_atttempt/results/overlays_unet.png)
+
+---
+
+
+
+
 
 
 #### DenseUNet Examples
