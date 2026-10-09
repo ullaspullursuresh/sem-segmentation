@@ -276,18 +276,13 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 
 | Metric | U-Net | Dense U-Net |
 |--------|-------|-------------|
-| IoU | <> | <> |
-| Dice | <> | <> |
-| Precision | <> | <> |
-| Recall | <> | <> |
-| Accuracy | <> | <> |
-| Relative area error | <> | <> |
+| IoU | 0.4928 | 0.7237 |
+| Dice | 0.6136 | 0.8111 |
+| Precision | 0.6292 | 0.8425 |
+| Recall | 0.8154 | - |
+| Accuracy | 0.8887 | 0.9865 |
 
-### Full metric table
 
-<!-- Paste the contents of results/summary.md here. It covers overlap, classification,
-     boundary (HD95, boundary F1), measurement (area, count, diameter) and probability
-     (ROC-AUC, average precision, calibration error) metrics for both models. -->
 
 ### Qualitative comparison
 
@@ -305,8 +300,6 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 #### DenseUNet Examples
 ![Some random examples with ground truth mask and prediction mask](https://github.com/ullaspullursuresh/sem-segmentation/blob/main/dense_unet/results/overlays.png)
 
-*Left to right: test image, ground-truth mask (light blue), and the error map of each model. Green = correctly segmented particle, red = false alarm, yellow = missed particle. The IoU and Dice of each image are printed under its error map.*
-
 ### How to read the results
 
 - **IoU and Dice** are the headline scores. They rank the models identically, because `Dice = 2·IoU / (1 + IoU)`.
@@ -315,10 +308,7 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 - **Relative area error** has a sign. Positive means the predicted particles are larger than the true ones, negative means smaller. This feeds directly into the size measurements.
 
 
-### 
-
-### Discussion
-
+---
 ### Discussion
 
 On the held-out test set (N = 168 images), the DenseU-Net outperformed the baseline U-Net on
