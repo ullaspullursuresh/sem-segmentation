@@ -288,7 +288,13 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 
 ### Qualitative comparison
 
-![Error maps for U-Net and Dense U-Net](figures/comparison.png)
+#### UNet examples
+
+![Some random examples with Ground truth mask and Prediction mask](unet_attempt/results/overlays_unet.png)
+
+
+#### DenseUNet Examples
+![Some random examples with ground truth mask and prediction mask](dense_net/results/overlays.png)
 
 *Left to right: test image, ground-truth mask (light blue), and the error map of each model. Green = correctly segmented particle, red = false alarm, yellow = missed particle. The IoU and Dice of each image are printed under its error map.*
 
@@ -304,32 +310,37 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 
 ### Discussion
 
-<!-- Fill in after running: which model scored higher, by how much, on which images the
-     gap is largest, what the error maps show (edges? small particles? touching particles?),
-     and how the area error affects the physical measurements. -->
+### Discussion
 
+On the held-out test set (N = 168 images), the DenseU-Net outperformed the baseline U-Net on
+every metric reported for both models. Mean Dice improved from 0.628 to 0.811 (+0.183), IoU
+from 0.510 to 0.724 (+0.214), precision from 0.672 to 0.843, and pixel accuracy from 0.890 to
+0.987. The spread across images also narrowed (Dice std 0.275 → 0.212), so the DenseU-Net was
+more consistent, although a std of 0.21 shows that some images are still segmented poorly.
 
+The U-Net's precision (0.672) is lower than its recall (0.798), which suggests it tends to
+over-segment: it finds most particles but also labels background as particle. Its pixel
+accuracy has a large spread (0.890 ± 0.242). Because background dominates SEM images, this
+suggests that a subset of images has gross failures (large false-positive regions) rather than
+small boundary errors. <Confirm from the overlay of the lowest-scoring images.>
 
-## Repository Structure
+For the DenseU-Net, a boundary F1 of 0.899 at a 2-pixel tolerance indicates that most
+predicted boundaries lie close to the annotated ones. The mean HD95 is 11.8 px and the mean
+relative area error is 34.5%, but both have standard deviations larger than their means
+(30.2 px and 78.6%). These averages are therefore dominated by a minority of difficult images,
+<for example images with few or very small particles, where a small absolute error is a large
+relative error>, and the typical image is better than the mean suggests. <Add median and IQR.>
 
-```
-├── data/                 # datasets (not tracked; see Dataset)
-├── notebooks/            # exploration and analysis
-├── src/
-│   ├── models/           # U-Net, DenseNet
-│   ├── datasets.py       # data loading and augmentation
-│   ├── train.py          # supervised training
-│   ├── train_semi.py     # semi-supervised training
-│   ├── evaluate.py       # metrics on the test set
-│   └── measure.py        # area / size extraction from masks
-├── weights/              # trained checkpoints
-├── figures/
-├── requirements.txt
-└── README.md
-```
+Because particle area and equivalent diameter are computed directly from the mask
+(D = 2√(A/π)), mask errors propagate into the size distribution: a 34% area error corresponds
+to roughly a 16% error in equivalent diameter. Small particles are most affected, since a
+one-pixel boundary shift is a large fraction of their size.
 
-*(Adjust to match your actual layout.)*
-
+Limitations: the comparison uses a single data split and a single training run per model;
+images were downscaled to 256×256; touching particles are not separated; the U-Net and
+DenseU-Net <were / were not> trained with identical settings (loss, augmentation, learning-rate
+schedule); no paired significance test has been run yet; and relative area error is only
+available for the DenseU-Net.
 ---
 
 ## Getting Started
@@ -344,20 +355,19 @@ pip install -r requirements.txt
 
 ### Training
 
-```bash
-# Supervised baseline
-python src/train.py --model unet --epochs <n>
+Open the notebooks in VS Code (or Jupyter) and run the cells in order:
 
-# Semi-supervised
-python src/train_semi.py --weights weights/<checkpoint>.pth --unlabelled data/unlabelled
-```
+1. `notebooks/train_unet.ipynb`: trains the U-Net baseline
+2. `notebooks/train_denseunet.ipynb`: trains the DenseU-Net
+
+Before running, set the dataset paths in the configuration cell at the top of each notebook.
+Checkpoints are saved to `checkpoints/` (`*_best.pth` and `*_last.pth`).
 
 ### Evaluation
 
-```bash
-python src/evaluate.py --weights weights/<checkpoint>.pth --split test
-```
-
+Run `notebooks/evaluate.ipynb`. It loads the best checkpoint for each model, computes
+test-set metrics (Dice, IoU, accuracy, precision, relative area error), runs the paired
+test, and saves the results and overlay figures to `results/`.
 ---
 
 ## Hardware
@@ -369,10 +379,21 @@ Trained on a laptop GPU (NVIDIA RTX 3060).
 
 ## Acknowledgements
 
-- nanoSEM dataset: <citation>
-- U-Net: Ronneberger et al., 2015
-- DenseNet: Huang et al., 2017
-
+- **Dataset:** NanoSEM-464, from B. Yildirim and J. M. Cole, "Bayesian Particle Instance
+  Segmentation for Electron Microscopy Image Quantification," *J. Chem. Inf. Model.*, 2021, 61, 1136–1149.
+  Data and splits were obtained via the MU-KAN repository (https://github.com/hxy434/MU-KAN).
+               NanoSEM-1707 instead: R. Zahedi-Nasab, *The Particle Masks for Segmentation*,
+  Kaggle, 2022, https://www.kaggle.com/datasets/roxanazahedi/particle-array-2.
+- **Reference paper:** X. Huang, Y. Yin, J. Hu, W. Yu, L. Fang, J. Liu and D. Li, "Automated SEM-based
+  nanoparticle metrology for materials characterization via segmentation and robust scale-bar
+  recognition," *RSC Adv.*, 2026, 16, 45081–45091. DOI: 10.1039/d6ra02763f (CC BY 4.0).
+  Their evaluation protocol and metric definitions informed this work.
+- **U-Net:** O. Ronneberger, P. Fischer and T. Brox, "U-Net: Convolutional Networks for Biomedical
+  Image Segmentation," MICCAI, 2015.
+- **DenseNet:** G. Huang, Z. Liu, L. van der Maaten and K. Q. Weinberger, "Densely Connected
+  Convolutional Networks," CVPR, 2017.
+- **Dense U-Net (segmentation variant):** S. Jégou et al., "The One Hundred Layers Tiramisu:
+  Fully Convolutional DenseNets for Semantic Segmentation," CVPRW, 2017.
 ## License
 
 <MIT / other>
