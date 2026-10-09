@@ -40,7 +40,8 @@ Every sample in this project is a **pair** of files:
 
 The mask is the "answer key". It was drawn by a human annotator, and it tells the model, pixel by pixel, what it should have found in the image.
 
-![Example image, mask and overlay](figures/image_mask_example.png)
+![Example image, mask and overlay](<img width="1600" height="533" alt="image" src="https://github.com/user-attachments/assets/9ce24ac3-7ebc-40ec-983d-71d0628b25ac" />
+)
 
 *Left: the original SEM image. Middle: the ground-truth binary mask (white = particle, black = background). Right: the mask overlaid on the image in light blue, showing how the mask lines up with the structures in the image.*
 
