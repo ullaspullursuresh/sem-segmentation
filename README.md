@@ -1,5 +1,4 @@
-# Supervised Segmentation of SEM Nanoparticle Images
-## Working towards a Semi-Supervised Model
+# Semi-Supervised Segmentation of SEM Nanoparticle Images
 
 The aim of this work is to build a pipeline that trains a network on a labelled dataset, and later can be extended to a semi-supervised model to segment images. The pipeline can be implemented using any models. For this attempt I have started with the UNet and Dense-UNet model. This attempt is inspired and derived from the work of Huang et al. (DOI: 10.1039/d6ra02763f), who have done this segementation task on the publically available annotated datasets - NanoSEM-464 and NanoSEM-1707. 
 
