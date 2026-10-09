@@ -290,11 +290,11 @@ This writes `per_image_<model>.csv` (every metric for every image), `summary.md`
 
 #### UNet examples
 
-![Some random examples with Ground truth mask and Prediction mask](unet_attempt/results/overlays_unet.png)
+![Some random examples with Ground truth mask and Prediction mask](https://github.com/ullaspullursuresh/sem-segmentation/blob/main/unet_atttempt/results/overlays_unet.png)
 
 
 #### DenseUNet Examples
-![Some random examples with ground truth mask and prediction mask](dense_net/results/overlays.png)
+![Some random examples with ground truth mask and prediction mask](https://github.com/ullaspullursuresh/sem-segmentation/blob/main/dense_unet/results/overlays.png)
 
 *Left to right: test image, ground-truth mask (light blue), and the error map of each model. Green = correctly segmented particle, red = false alarm, yellow = missed particle. The IoU and Dice of each image are printed under its error map.*
 
